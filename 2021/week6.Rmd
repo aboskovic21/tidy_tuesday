@@ -1,0 +1,106 @@
+---
+title: 'Week 6: Wealth and Income'
+author: "Andrea Boskovic"
+date: "2/9/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# Install packages
+library(tidytuesdayR)
+library(tidyverse)
+```
+
+```{r}
+# Load all data
+tuesdata <- tidytuesdayR::tt_load('2021-02-09')
+
+# Load each dataset
+lifetime_earn <- tuesdata$lifetime_earn
+home_owner <- tuesdata$home_owner
+income_aggregate <- tuesdata$income_aggregate
+income_distribution <- tuesdata$income_distribution
+income_limits <- tuesdata$income_limits
+income_mean <- tuesdata$income_mean
+income_time <- tuesdata$income_time
+lifetime_wealth <- tuesdata$lifetime_wealth
+race_wealth <- tuesdata$race_wealth
+retirement <- tuesdata$retirement
+student_debt <- tuesdata$student_debt
+```
+
+```{r}
+# Median lifetime wealth for white vs black over time
+wealth <- lifetime_wealth %>% 
+  filter(type == "Median") %>%
+  mutate(race = as.factor(race))
+
+# Clean y axis values 
+ylab <- c(1, 2, 3, 4)
+
+# Plot
+plot <- ggplot(data = wealth, aes(x = year, y = wealth_lifetime, color = race)) +
+  geom_point(size = 3) +
+  geom_line() +
+  labs(
+    x = "Year", y = "Lifetime Wealth (Millions)", color = "Race",
+    title = "Wealth Inequality by Race\n 1983-2016"
+  ) +
+  scale_y_continuous(
+    labels = paste0(ylab, "M"),
+    breaks = 10^5 * ylab
+  ) +
+  scale_colour_manual(values = c("#993300", "#ff9933")) +
+  xlim(1980, 2020) +
+  theme(
+    panel.background = element_rect(fill = "#ffffff"),
+    plot.background = element_rect(fill = "#ffffff"),
+    legend.background = element_rect(fill = "#ffffff"),
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(size = 12, hjust = 0.7),
+    legend.title = element_blank(),
+    legend.position = c(0.05, 0.95),
+    legend.justification = c(0, 1),
+    legend.key = element_rect(size = 5, fill = "#ffffff"),
+    legend.text = element_text(size = 12),
+    axis.title.y = element_text(size = 12),
+    axis.title.x = element_text(size = 12),
+    axis.text.x = element_text(size = 12),
+    axis.text.y = element_text(size = 12),
+    axis.line.x = element_line(size = 1),
+    axis.line.y = element_line(size = 1),
+    plot.margin = unit(c(1, 1, 1, 1), "cm"),
+    panel.grid.major = element_blank(), panel.grid.minor = element_blank()
+  )
+
+# Save the plot
+ggsave(filename = "plot.jpg", plot = plot, path = "/Users/andreaboskovic/Desktop/tidy_tuesday/tidy_tuesday/2021", dpi=300)
+```
+
+```{r}
+# Clean data
+dist <- income_distribution %>%
+  select(year, income_bracket, income_distribution) %>%
+  mutate(bracket = as.factor(income_bracket))
+dist <- dist[1:477, ]
+dist$bracket <- factor(dist$bracket, levels = c("Under $15,000", "$15,000 to $24,999", 
+                                                "$25,000 to $34,999", "$35,000 to $49,999", 
+                                                "$50,000 to $74,999", "$75,000 to $99,999", 
+                                                "$100,000 to $149,999", "$150,000 to $199,999",
+                                                "$200,000 and over"))
+
+# Plot
+ggplot(data = dist, aes(x = year, y = income_distribution, color = bracket)) +
+  geom_line() + 
+  labs(x = "Year", y = "Income Distribution", color = "Income Bracket",
+       title = "Income Distribution over Time\nby Income Bracket, 1967-2019") + 
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme_light()
+```
+
+
+
