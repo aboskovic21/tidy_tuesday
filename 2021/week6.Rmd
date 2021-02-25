@@ -47,7 +47,7 @@ plot <- ggplot(data = wealth, aes(x = year, y = wealth_lifetime, color = race)) 
   geom_point(size = 3) +
   geom_line() +
   labs(
-    x = "Year", y = "Lifetime Wealth (Millions)", color = "Race",
+    x = "Year", y = "Lifetime Wealth (Millions)", color = "Race", 
     title = "Wealth Inequality by Race\n 1983-2016"
   ) +
   scale_y_continuous(
@@ -59,7 +59,7 @@ plot <- ggplot(data = wealth, aes(x = year, y = wealth_lifetime, color = race)) 
   theme(
     panel.background = element_rect(fill = "#ffffff"),
     plot.background = element_rect(fill = "#ffffff"),
-    legend.background = element_rect(fill = "#ffffff"),
+    legend.background = element_rect(fill = "#ffffff"), 
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
     plot.subtitle = element_text(size = 12, hjust = 0.7),
     legend.title = element_blank(),
@@ -69,8 +69,7 @@ plot <- ggplot(data = wealth, aes(x = year, y = wealth_lifetime, color = race)) 
     legend.text = element_text(size = 12),
     axis.title.y = element_text(size = 12),
     axis.title.x = element_text(size = 12),
-    axis.text.x = element_text(size = 12),
-    axis.text.y = element_text(size = 12),
+    axis.text.x = element_text(size = 12), axis.text.y = element_text(size = 12),
     axis.line.x = element_line(size = 1),
     axis.line.y = element_line(size = 1),
     plot.margin = unit(c(1, 1, 1, 1), "cm"),
