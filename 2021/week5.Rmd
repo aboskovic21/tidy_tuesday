@@ -23,12 +23,16 @@ plastics <- tuesdata$plastics
 unique(plastics$country)
 
 plastics_clean <- plastics %>%
-  filter(country != "EMPTY", year == 2019, parent_company == "The Coca-Cola Company") %>%
+  filter(country != "EMPTY", year == 2019, 
+         parent_company == "The Coca-Cola Company",
+         grand_total != 0) %>%
   select(country, year, parent_company, grand_total) %>%
   rename(region = country) 
 
-# Make USA match world_map
-plastics_clean$region[36] <- "USA"
+# Make cleaning country names
+plastics_clean$region[27] <- "USA"
+plastics_clean$region[16] <- "Nigeria"
+plastics_clean$region[7] <- "Ecaudor"
 ```
 
 ```{r}
@@ -42,7 +46,7 @@ head(plastics_map)
 ```
 
 ```{r}
-ggplot(plastics_map, aes(x = long, y = lat, group = group, fill = log(grand_total))) +
+map_fail <- ggplot(plastics_map, aes(x = long, y = lat, group = group, fill = log(grand_total))) +
   geom_polygon(color = "white") +
   theme_void() +
   coord_fixed(ratio = 1.3) +
@@ -52,4 +56,21 @@ ggplot(plastics_map, aes(x = long, y = lat, group = group, fill = log(grand_tota
   scale_fill_viridis(option = "magma", direction = -1) 
 ```
 
+```{r}
+counts <- ggplot(plastics_clean, aes(x = reorder(region, grand_total), y = grand_total)) +
+  geom_col() +
+  labs(x = "Country", y = "Total Plastic",
+       title = "Plastic Produced per Country",
+       subtitle = "by the Coca-Cola Corporation",
+       caption = "Note that all values are nonzero") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+```{r}
+ggsave(filename = "plastic.jpg", plot = counts, path = "/Users/andreaboskovic/Desktop/tidy_tuesday/tidy_tuesday/2021", dpi=300)
+```
+
+```{r}
+ggsave(filename = "map_fail.jpg", plot = map_fail, path = "/Users/andreaboskovic/Desktop/tidy_tuesday/tidy_tuesday/2021", dpi=300)
+```
 
