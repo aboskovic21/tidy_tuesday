@@ -1,0 +1,65 @@
+---
+title: "week7"
+author: "Andrea Boskovic"
+date: "3/3/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(maps)
+library(viridis)
+```
+
+```{r}
+loc <- read_csv('locations.csv')
+vac <- read_csv('vaccinations.csv')
+```
+
+```{r}
+vac_small <- vac %>%
+  select(location, date, total_vaccinations) %>%
+  drop_na()
+
+vac_small <- vac_small %>%
+  group_by(location) %>%
+  summarise(tot_vacc_todate = max(total_vaccinations)) %>%
+  rename(region = location)
+
+# change location names
+vac_small$region[119] <- "USA"
+vac_small$region[118] <- "UK"
+```
+
+```{r}
+world_map <- map_data(map = "world"
+                      , region = ".")
+
+# country names?
+unique(world_map$region)
+unique(vac_small$region)
+```
+
+```{r}
+vacc_map <- right_join(vac_small, world_map, by = "region") %>%
+  filter(region != "Antarctica")
+```
+
+```{r}
+vaccine_plot <- ggplot(vacc_map, aes(x = long, y = lat, group = group, fill = tot_vacc_todate)) +
+  geom_polygon(color = "white") +
+  theme_void() +
+  coord_fixed(ratio = 1.3) +
+  labs(title = "Total COVID-19 Vaccinations in the World To Date",
+       subtitle = "Data Updated March 3, 2021",
+       caption = "* Countries in grey have no data",
+       fill = "Total Vaccinations") +
+  scale_fill_viridis(option = "magma", direction = -1)
+
+vaccine_plot
+```
+
+```{r}
+ggsave(filename = "vaccine_plot.jpg", plot = vaccine_plot, path = "/Users/andreaboskovic/Desktop/tidy_tuesday/tidy_tuesday/2021", dpi=300)
+```
