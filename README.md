@@ -4,5 +4,7 @@ Here are some [Tidy Tuesday](https://github.com/rfordatascience/tidytuesday) cha
 
 ## 2021
 
+### Week 5 - January 26 - Plastic Pollution
+
 ### Week 6 - February 9 - Wealth and Income
 
