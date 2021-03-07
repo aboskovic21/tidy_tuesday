@@ -8,3 +8,4 @@ Here are some [Tidy Tuesday](https://github.com/rfordatascience/tidytuesday) cha
 
 ### Week 6 - February 9 - Wealth and Income
 
+### Week 9 - March 5 - World COVID-19 Vaccinations
