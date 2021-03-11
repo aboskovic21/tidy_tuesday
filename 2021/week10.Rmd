@@ -65,26 +65,33 @@ top_season1 <- get_loudest_char(episode_numbers)
 ggplot(data = top_season1, aes(x = lines_spoken, y = imdb_rating, color = character)) + 
   geom_point() +
   labs(x = "Lines Spoken", y = "IMDB Rating", color = "Character", 
-       tile = "Lines Spoken and IMDB Ratings",
+       title = "Lines Spoken and IMDB Ratings",
        subtitle = "For Characters Speaking Most Often in Avatar")
 ```
 
 ```{r}
-aang <- image_read("C:/Users/Dektop/tidy_tuesday/tidy_tuesday/2021/aang.png")
 
-top_season1 <- top_season1 %>%
-  mutate(image = case_when(character == "Katara" ~ "C:/Users/Dektop/tidy_tuesday/tidy_tuesday/2021/katara.png",
-                           character == "Sokka" ~ "C:/Users/Dektop/tidy_tuesday/tidy_tuesday/2021/sokka.png",
-                           character == "Jet" ~ "C:/Users/Dektop/tidy_tuesday/tidy_tuesday/2021/jet.png",
-                           character == "Aang" ~ "C:/Users/Dektop/tidy_tuesday/tidy_tuesday/2021/aang.png"))
+# top_season1 <- top_season1 %>%
+#   mutate(image = case_when(character == "Katara" ~ "C:/Users/Desktop/tidy_tuesday/tidy_tuesday/2021/katara.png",
+#                            character == "Sokka" ~ "C:/Users/Desktop/tidy_tuesday/tidy_tuesday/2021/sokka.png",
+#                            character == "Jet" ~ "C:/Users/Desktop/tidy_tuesday/tidy_tuesday/2021/jet.png",
+#                            character == "Aang" ~ "C:/Users/Desktop/tidy_tuesday/tidy_tuesday/2021/aang.png"))
+
+top_season1$image[top_season1$character == "Katara"] <- "katara.png"
+top_season1$image[top_season1$character == "Aang"] <- "aang.png"
+top_season1$image[top_season1$character == "Jet"] <- "jet.png"
+top_season1$image[top_season1$character == "Sokka"] <- "sokka.png"
 
 top_season1$character <- factor(top_season1$character)
 
 ggplot(data = top_season1, aes(x = lines_spoken, y = imdb_rating)) + 
-  geom_image(aes(image=image, color = character), size=.2) + 
-  coord_fixed() +
+  geom_image(aes(image=image), size=.1, by = "height") + 
+  scale_size_identity() +
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5)) +
   labs(x = "Lines Spoken", y = "IMDB Rating", color = "Character", 
-       tile = "Lines Spoken and IMDB Ratings",
+       title = "Lines Spoken and IMDB Ratings",
        subtitle = "For Characters Speaking Most Often in Avatar")
 ```
 
