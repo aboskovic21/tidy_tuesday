@@ -1,0 +1,90 @@
+---
+title: "03.10.2021"
+author: "Andrea Boskovic"
+date: "3/10/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+# Packages
+library(mdsr)
+library(tidyverse)
+# to install magick need to run in terminal: brew install imagemagick@6
+library(magick)
+library(ggimage)
+#useful: https://cran.r-project.org/web/packages/magick/vignettes/intro.html#Base_R_rasters
+```
+
+```{r}
+# Load data
+tuesdata <- tidytuesdayR::tt_load('2020-08-11')
+avatar <- tuesdata$avatar
+scene_desc <- tuesdata$scene_description
+```
+
+```{r}
+# For first season, get line counts for each character per episode and episode rating
+av_small <- avatar %>% 
+  filter(character != "Scene Description",
+         book_num == 1) %>%
+  group_by(character, chapter_num, imdb_rating) %>%
+  summarise(lines_spoken = n()) %>%
+  drop_na(imdb_rating) %>%
+  rename(episode = chapter_num)
+```
+
+```{r}
+episode_numbers <- unique(av_small$episode)
+av_small %>%
+  filter(episode == 1) %>%
+  arrange(desc(lines_spoken)) %>%
+  head(n = 1)
+
+loudest <- data.frame(character = as.character(), episode = as.numeric(), imdb_rating = as.numeric(), lines_spoken = as.numeric())
+
+get_loudest_char <- function(episode_numbers) {
+  
+  for(i in 1:length(episode_numbers)) {
+    ep_num <- episode_numbers[i]
+    char <- av_small %>%
+              filter(episode == ep_num) %>%
+              arrange(desc(lines_spoken)) %>%
+              head(n = 1)
+    loudest[nrow(loudest) + 1,] <- char
+  }
+  
+  return(loudest)
+}
+
+top_season1 <- get_loudest_char(episode_numbers)
+```
+
+
+
+```{r}
+ggplot(data = top_season1, aes(x = lines_spoken, y = imdb_rating, color = character)) + 
+  geom_point() +
+  labs(x = "Lines Spoken", y = "IMDB Rating", color = "Character", 
+       tile = "Lines Spoken and IMDB Ratings",
+       subtitle = "For Characters Speaking Most Often in Avatar")
+```
+
+```{r}
+aang <- image_read("C:/Users/Dektop/tidy_tuesday/tidy_tuesday/2021/aang.png")
+
+top_season1 <- top_season1 %>%
+  mutate(image = case_when(character == "Katara" ~ "C:/Users/Dektop/tidy_tuesday/tidy_tuesday/2021/katara.png",
+                           character == "Sokka" ~ "C:/Users/Dektop/tidy_tuesday/tidy_tuesday/2021/sokka.png",
+                           character == "Jet" ~ "C:/Users/Dektop/tidy_tuesday/tidy_tuesday/2021/jet.png",
+                           character == "Aang" ~ "C:/Users/Dektop/tidy_tuesday/tidy_tuesday/2021/aang.png"))
+
+top_season1$character <- factor(top_season1$character)
+
+ggplot(data = top_season1, aes(x = lines_spoken, y = imdb_rating)) + 
+  geom_image(aes(image=image, color = character), size=.2) + 
+  coord_fixed() +
+  labs(x = "Lines Spoken", y = "IMDB Rating", color = "Character", 
+       tile = "Lines Spoken and IMDB Ratings",
+       subtitle = "For Characters Speaking Most Often in Avatar")
+```
+
