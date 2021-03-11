@@ -84,7 +84,7 @@ top_season1$image[top_season1$character == "Sokka"] <- "sokka.png"
 
 top_season1$character <- factor(top_season1$character)
 
-ggplot(data = top_season1, aes(x = lines_spoken, y = imdb_rating)) + 
+avatar_plt <- ggplot(data = top_season1, aes(x = lines_spoken, y = imdb_rating)) + 
   geom_image(aes(image=image), size=.1, by = "height") + 
   scale_size_identity() +
   theme_classic() +
@@ -95,3 +95,6 @@ ggplot(data = top_season1, aes(x = lines_spoken, y = imdb_rating)) +
        subtitle = "For Characters Speaking Most Often in Avatar")
 ```
 
+```{r}
+ggsave(filename = "avatar_plot.jpg", plot = avatar_plt, path = "/Users/andreaboskovic/Desktop/tidy_tuesday/tidy_tuesday/2021", dpi=300)
+```
