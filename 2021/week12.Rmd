@@ -1,0 +1,31 @@
+---
+title: "week12"
+author: "Andrea Boskovic"
+date: "3/24/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(mdsr)
+library(tidyverse)
+```
+
+```{r}
+tuesdata <- tidytuesdayR::tt_load('2019-01-29')
+
+cheese <- tuesdata$clean_cheese
+fluid_milk <- tuesdata$fluid_milk_sales
+milk_prod <- tuesdata$milk_products_facts
+milkcow <- tuesdata$milkcow_facts
+state_milk <- tuesdata$state_milk_production
+```
+
+```{r}
+cheese_tidy <- gather(cheese, key = "cheese_type", value = "amount", -Year)
+```
+
+```{r}
+
+```
+
