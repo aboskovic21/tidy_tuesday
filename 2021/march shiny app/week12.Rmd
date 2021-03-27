@@ -84,6 +84,8 @@ ggplot(milk_prod_small, aes(x = year, y = total_amount, color = product_general)
 ```
 
 ```{r}
+milkcow_clean <- gather(milkcow, key = "cow_stat", value = "amount", -year)
+
 ggplot(milkcow, aes(x = year, y = avg_milk_cow_number)) +
   geom_line()
 ```
