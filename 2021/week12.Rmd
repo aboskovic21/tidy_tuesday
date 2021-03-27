@@ -84,6 +84,7 @@ ggplot(milk_prod_small, aes(x = year, y = total_amount, color = product_general)
 ```
 
 ```{r}
-
+ggplot(milkcow, aes(x = year, y = avg_milk_cow_number)) +
+  geom_line()
 ```
 

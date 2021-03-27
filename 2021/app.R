@@ -143,14 +143,30 @@ server <- function(input, output) {
   
   # Cheese popularity over years
   output$line <- renderPlot({
-    ggplot(data_for_cheese(), aes(x = Year, y = amount, color = cheese_type)) + 
-      geom_line() +
-      labs(x = "Year",
-            y = "Consumption in lbs per Person",
-           title = "Cheese Consumption over Time in the US",
-           color = " Cheese Type"
-           ) +
-      theme_classic()
+   # if(data_for_cheese()$Year == "1993" & max(data_for_cheese()$amount) <= 4) {
+      ggplot(data_for_cheese(), aes(x = Year, y = amount, color = cheese_type)) + 
+        geom_line() +
+        labs(x = "Year",
+              y = "Consumption in lbs per Person",
+             title = "Cheese Consumption over Time in the US",
+             color = " Cheese Type"
+             ) +
+        theme_classic() +
+        geom_vline(xintercept = 1993, linetype = "dashed") +
+        geom_text(aes(x = 1997, label="got milk?\nCampain Launched", y=2.5), color = "black", text=element_text(size=12)) 
+    #   }
+    # else {
+    #   ggplot(data_for_cheese(), aes(x = Year, y = amount, color = cheese_type)) +
+    #     geom_line() +
+    #     labs(x = "Year",
+    #          y = "Consumption in lbs per Person",
+    #          title = "Cheese Consumption over Time in the US",
+    #          color = " Cheese Type"
+    #     ) +
+    #     theme_classic() +
+    #     geom_vline(xintercept = 1993) +
+    #     geom_text(aes(x = 1997, label="got milk?\nCampain Launched", y=5), color = "black", text=element_text(size=12))
+    # }
   })
   
   data_for_table <- reactive ({
