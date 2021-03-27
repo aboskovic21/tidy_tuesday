@@ -34,11 +34,56 @@ ggplot(cheese_tidy, aes(x = Year, y = amount, color = cheese_type)) +
 ```
 
 ```{r}
+ggplot(data = fluid_milk, aes(x = year, y = pounds, color = milk_type)) +
+  geom_line()
+```
+
+
+```{r}
 milk <- fluid_milk %>%
   filter(milk_type != "Total Production") %>%
 # have user select year
   group_by(year) %>%
   summarise(most_popular = max(pounds)) %>%
   inner_join(fluid_milk, by = c("year", "most_popular" = "pounds"))
+```
+
+```{r}
+milk_prod_tidy <- gather(milk_prod, key = "product", value = "amount", -year) %>%
+  filter(product != "fluid_milk") %>%
+  mutate(is_yogurt = str_detect(product, 'yogurt'),
+         is_cheese = str_detect(product, 'cheese'),
+         is_butter = str_detect(product, 'butter'),
+         is_dry = str_detect(product, 'dry'),
+         is_evap = str_detect(product, 'evap_cnd'),
+         is_frozen = str_detect(product, 'frozen'))
+
+milk_prod_small <- milk_prod_tidy %>%
+  mutate(product_general = ifelse(is_yogurt == TRUE, "yogurt",
+    ifelse(is_cheese == TRUE, "cheese",
+      ifelse(is_butter == TRUE, "butter",
+        ifelse(is_dry == TRUE, "dry",
+          ifelse(is_evap == TRUE, "evap", "frozen")
+        )
+      )
+    )
+  )) %>%
+  select(year, amount, product_general) %>%
+  group_by(year, product_general) %>%
+  summarise(total_amount = sum(amount))
+```
+
+```{r}
+ggplot(milk_prod_small, aes(x = year, y = total_amount, color = product_general)) +
+  geom_line() +
+  labs(x= "Year", y = "Average Comsumption per Person",
+       title = "Average Dairy Product Comsuption per Person over Time",
+       color = "Product") + 
+  scale_color_manual(labels=c("Butter","Cheese","Dry", "Evaporated", "Frozen", "Yogurt"), 
+                     values = c("#f8766d", "#afa100", "#00ba42", "#00b4ef", "#ac88ff", "#fc61d5"))
+```
+
+```{r}
+
 ```
 
