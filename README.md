@@ -11,3 +11,7 @@ Here are some [Tidy Tuesday](https://github.com/rfordatascience/tidytuesday) cha
 ### Week 9 - March 5 - World COVID-19 Vaccinations
 
 ### Week 10 - March 11 - Avatar the Last Airbender
+
+
+### Week 12 - March 27 - Dairy Products
+[App available here!](https://r.amherst.edu/apps/aboskovic21/tidytuesday_w12/)
