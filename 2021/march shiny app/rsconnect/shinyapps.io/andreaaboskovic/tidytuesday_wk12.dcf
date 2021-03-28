@@ -1,0 +1,12 @@
+name: tidytuesday_wk12
+title: tidytuesday_wk12
+username:
+account: andreaaboskovic
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3873620
+bundleId: 4402741
+url: https://andreaaboskovic.shinyapps.io/tidytuesday_wk12/
+when: 1616889738.14394
+asMultiple: FALSE
+asStatic: FALSE

@@ -1,13 +1,17 @@
-# Load packages
-library(shiny)
-library(shinythemes)
 library(tidyverse)
 library(lubridate)
+# library(shiny)
+# library(shinythemes)
 
 # For icons: https://fontawesome.com/icons?d=gallery&p=2&q=glass&m=free
 
 # Load dataset
 tuesdata <- tidytuesdayR::tt_load('2019-01-29')
+cheese <- tuesdata$clean_cheese
+fluid_milk <- tuesdata$fluid_milk_sales
+milk_prod <- tuesdata$milk_products_facts
+milkcow <- tuesdata$milkcow_facts
+state_milk <- tuesdata$state_milk_production
 
 # Cheese Data
 cheese <- tuesdata$clean_cheese %>%
@@ -22,13 +26,12 @@ fluid_milk <- tuesdata$fluid_milk_sales %>%
          year = year(year))
 for_fluid_milk <- fluid_milk %>%
   filter(milk_type != "Total Production")
-milk_choices <- unique(for_milk_choices$milk_type)
+milk_choices <- unique(for_fluid_milk$milk_type)
 
 fluid_milk <- fluid_milk %>%
   mutate(year = strptime(year, "%Y"),
          year = format(year, "%Y"),
          year = as.Date(year, "%Y"))
-#max_year_value <- year(as.Date(as.character(2003), format = "%Y"))
 
 
 # Milk Products Data
@@ -238,7 +241,7 @@ ui <- navbarPage(
         tabPanel(
           title = "General Infomration",
           br(),
-          tags$a(href="https://www.gofundme.com/f/fantasy-football-mental-health-initiative?utm_medium=copy_link&utm_source=customer&utm_campaign=p_lico+share-sheet", 
+          tags$a(href="https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-01-29", 
                  "The data for this project came from the R4DS Tidy Tuesday Project: 01/29/2019."))
       )
     )
@@ -393,13 +396,6 @@ server <- function(input, output) {
     }
   }, deleteFile = FALSE)
 
-  # output$url <- renderUI({       
-  #   tagList("URL link:", "https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-01-29")     
-  # })
-  # 
-  # output$description <- renderText ({
-  #   paste0("This dataset comes from the R Tidy Tuesday Data, published on January 29, 2019. The link to the dataset is available ", url)
-  # })
 }
 
 # Create Shiny app ----
