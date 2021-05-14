@@ -1,7 +1,7 @@
 library(tidyverse)
 library(lubridate)
 # library(shiny)
-# library(shinythemes)
+library(shinythemes)
 
 # For icons: https://fontawesome.com/icons?d=gallery&p=2&q=glass&m=free
 
@@ -310,7 +310,7 @@ server <- function(input, output) {
       ) +
       theme_classic() +
       geom_vline(xintercept = 1993, linetype = "dashed") +
-      geom_text(aes(x = 1997, label="got milk?\nCampain Launched", y=2.5), color = "black", text=element_text(size=12))
+      geom_text(aes(x = 1997, label="got milk?\nCampaign Launched", y=15000000000), color = "black", text=element_text(size=12))
   })
   
   output$milk_line <- renderPlot ({
